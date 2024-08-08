@@ -6,39 +6,62 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct RecipeView: View {
     @ObservedObject var viewModel: RecipeViewModel
-    
+    @Environment(\.managedObjectContext) private var viewContext
+    @State private var isFavorited: Bool = false
+
     var body: some View {
-        ScrollView { // Allow vertical scrolling for content
+        ScrollView {
             VStack() {
-                // Image
-                if let imageURL = viewModel.searchResult.imageURL, let url = URL(string: imageURL) {
-                    AsyncImage(url: url) { image in
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(maxWidth: .infinity, maxHeight: 120)
-                            .clipped()
-                    } placeholder: {
+                ZStack(alignment: .topTrailing) {
+                    // Image
+                    if let imageURL = viewModel.searchResult.imageURL, let url = URL(string: imageURL) {
+                        AsyncImage(url: url) { image in
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(maxWidth: .infinity, maxHeight: 120)
+                                .clipped()
+                        } placeholder: {
+                            Image(systemName: "photo")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(maxWidth: .infinity, maxHeight: 120)
+                                .clipped()
+                        }
+                    } else {
                         Image(systemName: "photo")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(maxWidth: .infinity, maxHeight: 120)
                             .clipped()
                     }
-                } else {
-                    Image(systemName: "photo")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(maxWidth: .infinity, maxHeight: 120)
-                        .clipped()
+                    // Favorite Button
+                    Button(action: {
+                        if isFavorited {
+                            CoreDataManager.shared.removeFavorite(recipeId: viewModel.searchResult.id)
+                        } else {
+                            CoreDataManager.shared.saveFavorite(recipe: viewModel.searchResult)
+                        }
+                        isFavorited.toggle()
+                    }) {
+                        Image(systemName: isFavorited ? "heart.fill" : "heart")
+                            .foregroundColor(isFavorited ? .red : .white)
+                            .padding(8)
+                    }
+                    .onAppear {
+                        isFavorited = CoreDataManager.shared.isFavorited(recipeId: viewModel.searchResult.id)
+                    }
+                    .background(Color.black.opacity(0.7))
+                    .clipShape(Circle())
                 }
                 
                 // Title
                 Text(viewModel.searchResult.title)
-                    .font(.largeTitle)                
+                    .font(.largeTitle)
                 
                 // readyInMinutes
                 if let readyInMinutes = viewModel.recipeResult?.readyInMinutesFormatted {

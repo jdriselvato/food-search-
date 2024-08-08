@@ -52,37 +52,6 @@ struct ContentView: View {
             }
         }
     }
-    
-    //    private func addItem() {
-    //        withAnimation {
-    //            let newItem = Item(context: viewContext)
-    //            newItem.timestamp = Date()
-    //
-    //            do {
-    //                try viewContext.save()
-    //            } catch {
-    //                // Replace this implementation with code to handle the error appropriately.
-    //                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-    //                let nsError = error as NSError
-    //                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-    //            }
-    //        }
-    //    }
-    
-    //    private func deleteItems(offsets: IndexSet) {
-    //        withAnimation {
-    //            offsets.map { items[$0] }.forEach(viewContext.delete)
-    //
-    //            do {
-    //                try viewContext.save()
-    //            } catch {
-    //                // Replace this implementation with code to handle the error appropriately.
-    //                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-    //                let nsError = error as NSError
-    //                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-    //            }
-    //        }
-    //    }
 }
 
 struct SearchResultView: View {
@@ -118,11 +87,14 @@ struct SearchResultView: View {
                 
                 // Favorite Button
                 Button(action: {
-                    isFavorited.toggle()
+                    // No-op
                 }) {
                     Image(systemName: isFavorited ? "heart.fill" : "heart")
                         .foregroundColor(isFavorited ? .red : .white)
                         .padding(8)
+                }
+                .onAppear {
+                    isFavorited = CoreDataManager.shared.isFavorited(recipeId: searchResult.id)
                 }
                 .background(Color.black.opacity(0.7))
                 .clipShape(Circle())

@@ -54,3 +54,82 @@ struct PersistenceController {
         container.viewContext.automaticallyMergesChangesFromParent = true
     }
 }
+
+class CoreDataManager {
+    static let shared = CoreDataManager()
+
+    private init() {}
+
+    private lazy var persistentContainer: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: "food_search")
+        container.loadPersistentStores { description, error in
+            if let error = error as NSError? {
+                fatalError("Unresolved error \(error), \(error.userInfo)")
+            }
+        }
+        return container
+    }()
+
+    var context: NSManagedObjectContext {
+        return persistentContainer.viewContext
+    }
+
+    // Save a favorite recipe
+    func saveFavorite(recipe: SearchResult) {
+        let favorite = FavoriteRecipe(context: context)
+        favorite.id = Int64(recipe.id)
+        saveContext()
+    }
+
+    // Fetch favorite recipes
+    func fetchFavorites() -> [FavoriteRecipe] {
+        let fetchRequest: NSFetchRequest<FavoriteRecipe> = FavoriteRecipe.fetchRequest()
+        do {
+            return try context.fetch(fetchRequest)
+        } catch {
+            print("Failed to fetch favorites: \(error)")
+            return []
+        }
+    }
+
+    // Check if a recipe is favorited
+    func isFavorited(recipeId: Int) -> Bool {
+        let fetchRequest: NSFetchRequest<FavoriteRecipe> = FavoriteRecipe.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %d", recipeId)
+        do {
+            let results = try context.fetch(fetchRequest)
+            return !results.isEmpty
+        } catch {
+            print("Failed to check if favorited: \(error)")
+            return false
+        }
+    }
+
+    // Remove a favorite recipe
+    func removeFavorite(recipeId: Int) {
+        let fetchRequest: NSFetchRequest<FavoriteRecipe> = FavoriteRecipe.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %d", recipeId)
+        do {
+            let results = try context.fetch(fetchRequest)
+            for favorite in results {
+                context.delete(favorite)
+            }
+            saveContext()
+        } catch {
+            print("Failed to remove favorite: \(error)")
+        }
+    }
+
+    // Save context
+    private func saveContext() {
+        let context = persistentContainer.viewContext
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch {
+                let nserror = error as NSError
+                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            }
+        }
+    }
+}
