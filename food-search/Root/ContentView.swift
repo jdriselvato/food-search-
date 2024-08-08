@@ -52,7 +52,9 @@ struct ContentView: View {
                     .background(Color.clear)
                     .padding(0)
                 } else {
+                    Spacer()
                     Text("Find your perfect Recipe today")
+                    Spacer()
                 }
             }
             .alert(isPresented: $viewModel.showAlert) {
