@@ -19,6 +19,8 @@
 		371A01782C6534870051A032 /* FoodAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371A01772C6534870051A032 /* FoodAPI.swift */; };
 		371A017A2C653E590051A032 /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371A01792C653E590051A032 /* ContentViewModel.swift */; };
 		371A017E2C654D820051A032 /* RecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371A017D2C654D820051A032 /* RecipeView.swift */; };
+		371A01802C654E820051A032 /* RecipeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371A017F2C654E820051A032 /* RecipeViewModel.swift */; };
+		37B672262C6560CB00F36F3F /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B672252C6560CB00F36F3F /* Helpers.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +56,8 @@
 		371A01772C6534870051A032 /* FoodAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodAPI.swift; sourceTree = "<group>"; };
 		371A01792C653E590051A032 /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModel.swift; sourceTree = "<group>"; };
 		371A017D2C654D820051A032 /* RecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeView.swift; sourceTree = "<group>"; };
+		371A017F2C654E820051A032 /* RecipeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeViewModel.swift; sourceTree = "<group>"; };
+		37B672252C6560CB00F36F3F /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +116,7 @@
 				371A01772C6534870051A032 /* FoodAPI.swift */,
 				371A01532C6534610051A032 /* food_search.xcdatamodeld */,
 				371A014E2C6534610051A032 /* Preview Content */,
+				37B672252C6560CB00F36F3F /* Helpers.swift */,
 			);
 			path = "food-search";
 			sourceTree = "<group>";
@@ -154,6 +159,7 @@
 			isa = PBXGroup;
 			children = (
 				371A017D2C654D820051A032 /* RecipeView.swift */,
+				371A017F2C654E820051A032 /* RecipeViewModel.swift */,
 			);
 			path = Recipe;
 			sourceTree = "<group>";
@@ -292,6 +298,8 @@
 				371A01552C6534610051A032 /* food_search.xcdatamodeld in Sources */,
 				371A017A2C653E590051A032 /* ContentViewModel.swift in Sources */,
 				371A017E2C654D820051A032 /* RecipeView.swift in Sources */,
+				37B672262C6560CB00F36F3F /* Helpers.swift in Sources */,
+				371A01802C654E820051A032 /* RecipeViewModel.swift in Sources */,
 				371A014B2C65345B0051A032 /* ContentView.swift in Sources */,
 				371A01492C65345B0051A032 /* food_searchApp.swift in Sources */,
 				371A01782C6534870051A032 /* FoodAPI.swift in Sources */,

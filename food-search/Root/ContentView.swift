@@ -13,44 +13,44 @@ struct ContentView: View {
     @State private var searchText: String = "corn"
     @Environment(\.managedObjectContext) private var viewContext
     
-    //    @FetchRequest(
-    //        sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
-    //        animation: .default)
-    //    private var items: FetchedResults<Item>
-    
     var body: some View {
-        VStack {
-            HStack {
-                TextField("Search...", text: $searchText, onCommit: {
-                    viewModel.query = searchText
-                })
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding(.leading)
+        NavigationView {
+            VStack {
+                HStack {
+                    TextField("Search...", text: $searchText, onCommit: {
+                        viewModel.query = searchText
+                    })
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding(.leading)
+                    
+                    Button(action: {
+                        viewModel.query = searchText
+                    }) {
+                        Text("Search")
+                            .padding(.horizontal)
+                            .padding(.vertical, 8)
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(8)
+                    }
+                    .padding(.trailing)
+                }
+                .padding(.vertical)
                 
-                Button(action: {
-                    viewModel.query = searchText
-                }) {
-                    Text("Search")
-                        .padding(.horizontal)
-                        .padding(.vertical, 8)
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(8)
+                List(viewModel.searchResults) { result in
+                    ZStack {
+                        SearchResultView(searchResult: result)
+                        NavigationLink(destination: RecipeView(viewModel: RecipeViewModel(searchResult: result))) {
+                            EmptyView()
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                    }
                 }
-                .padding(.trailing)
+                .listStyle(PlainListStyle())
+                .background(Color.clear)
+                .padding(0)
             }
-            .padding(.vertical)
-            
-            List(viewModel.searchResults) { result in
-                NavigationLink(destination: SearchResultDetailView(result: result)) {
-                    SearchResultView(searchResult: result)
-                }
-            }
-            .listStyle(PlainListStyle())
-            .background(Color.clear)
-            .padding(0)
         }
-        .navigationTitle("Search")
     }
     
     //    private func addItem() {
