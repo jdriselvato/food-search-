@@ -11,7 +11,7 @@ import CoreData
 struct ContentView: View {
     @StateObject private var viewModel = ContentViewModel()
 
-    @State private var searchText: String = "corn"
+    @State private var searchText: String = ""
     @Environment(\.managedObjectContext) private var viewContext
     
     var body: some View {
@@ -38,18 +38,22 @@ struct ContentView: View {
                 }
                 .padding(.vertical)
                 
-                List(viewModel.searchResults) { result in
-                    ZStack {
-                        SearchResultView(searchResult: result)
-                        NavigationLink(destination: RecipeView(viewModel: RecipeViewModel(searchResult: result))) {
-                            EmptyView()
+                if !viewModel.searchResults.isEmpty {
+                    List(viewModel.searchResults) { result in
+                        ZStack {
+                            SearchResultView(searchResult: result)
+                            NavigationLink(destination: RecipeView(viewModel: RecipeViewModel(searchResult: result))) {
+                                EmptyView()
+                            }
+                            .buttonStyle(PlainButtonStyle())
                         }
-                        .buttonStyle(PlainButtonStyle())
                     }
+                    .listStyle(PlainListStyle())
+                    .background(Color.clear)
+                    .padding(0)
+                } else {
+                    Text("Find your perfect Recipe today")
                 }
-                .listStyle(PlainListStyle())
-                .background(Color.clear)
-                .padding(0)
             }
             .alert(isPresented: $viewModel.showAlert) {
                 Alert(

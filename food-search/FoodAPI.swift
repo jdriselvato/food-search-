@@ -17,7 +17,7 @@ class FoodAPI: FoodAPIProtocol {
     static let shared = FoodAPI()
     
     private let baseURL: String = "https://api.spoonacular.com"
-    private let apiKey: String = "94df60d6e6c74d1eb07921c1df34f68d"
+    private let apiKey: String = "4377e82014c548cd91d0e612201e1751"
     
     func fetchComplexSearchResults(query: String) -> AnyPublisher<ComplexSearch, Error> {
         guard let url = URL(string: baseURL + "/recipes/complexSearch?apiKey=\(apiKey)&query=\(query)") else {
