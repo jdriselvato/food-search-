@@ -108,6 +108,13 @@ struct RecipeView: View {
                 }
             }
             .padding()
+            .alert(isPresented: $viewModel.showAlert) {
+                Alert(
+                    title: Text("Error"),
+                    message: Text(viewModel.alertMessage),
+                    dismissButton: .default(Text("OK"))
+                )
+            }
         }
         .frame(maxWidth: .infinity)
         .navigationTitle(viewModel.searchResult.title)

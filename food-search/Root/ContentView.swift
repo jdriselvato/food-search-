@@ -10,6 +10,7 @@ import CoreData
 
 struct ContentView: View {
     @StateObject private var viewModel = ContentViewModel()
+
     @State private var searchText: String = "corn"
     @Environment(\.managedObjectContext) private var viewContext
     
@@ -49,6 +50,13 @@ struct ContentView: View {
                 .listStyle(PlainListStyle())
                 .background(Color.clear)
                 .padding(0)
+            }
+            .alert(isPresented: $viewModel.showAlert) {
+                Alert(
+                    title: Text("Error"),
+                    message: Text(viewModel.alertMessage),
+                    dismissButton: .default(Text("OK"))
+                )
             }
         }
     }

@@ -11,7 +11,10 @@ import Combine
 class ContentViewModel: ObservableObject {
     @Published var query: String = ""
     @Published var searchResults: [SearchResult] = []
-
+    // Errors
+    @Published var showAlert: Bool = false
+    @Published var alertMessage: String = ""
+    
     private var cancellables = Set<AnyCancellable>()
     
     init() {
@@ -39,6 +42,8 @@ class ContentViewModel: ObservableObject {
             }
             .catch { error -> Just<[SearchResult]> in
                 print("Error fetching search results: \(error)")
+                self.alertMessage = "Error fetching search results: \(error)"
+                self.showAlert = true
                 return Just([])
             }
             .assign(to: &$searchResults)

@@ -8,56 +8,18 @@
 import Foundation
 import Combine
 
-class FoodAPI {
+protocol FoodAPIProtocol {
+    func fetchComplexSearchResults(query: String) -> AnyPublisher<ComplexSearch, Error>
+    func fetchRecipeResult(id: Int) -> AnyPublisher<RecipeResult, Error>
+}
+
+class FoodAPI: FoodAPIProtocol {
     static let shared = FoodAPI()
     
     private let baseURL: String = "https://api.spoonacular.com"
     private let apiKey: String = "71b17e5d66664474a7dbdfdcdead59bb"
-
-    func fetchComplexSearchResults(query: String) -> AnyPublisher<ComplexSearch, Error> {
-        // Hardcoded JSON string
-        let jsonString = """
-        {
-            "results": [
-                {
-                    "id": 627987,
-                    "title": "onion pakoda recipe",
-                    "image": "https://img.spoonacular.com/recipes/627987-312x231.jpg"
-                },
-                {
-                    "id": 651994,
-                    "title": "Miniature Fruit Tarts",
-                    "image": "https://img.spoonacular.com/recipes/651994-312x231.jpg"
-                }
-            ]
-        }
-        """
-        
-        // Convert JSON string to Data
-        guard let jsonData = jsonString.data(using: .utf8) else {
-            return Fail(error: URLError(.cannotParseResponse))
-                .eraseToAnyPublisher()
-        }
-        
-        return Just(jsonData)
-            .decode(type: ComplexSearch.self, decoder: JSONDecoder())
-            .handleEvents(receiveOutput: { complexSearch in
-                print("Decoded ComplexSearch: \(complexSearch)")
-            })
-            .mapError { error in
-                if let decodingError = error as? DecodingError {
-                    print("Decoding error: \(decodingError)")
-                } else {
-                    print("Error: \(error)")
-                }
-                return error
-            }
-            .receive(on: DispatchQueue.main)
-            .eraseToAnyPublisher()
-    }
-
     
-    func real_fetchComplexSearchResults(query: String) -> AnyPublisher<ComplexSearch, Error> {
+    func fetchComplexSearchResults(query: String) -> AnyPublisher<ComplexSearch, Error> {
         guard let url = URL(string: baseURL + "/recipes/complexSearch?apiKey=\(apiKey)&query=\(query)") else {
             return Fail(error: URLError(.badURL))
                 .eraseToAnyPublisher()
@@ -72,9 +34,6 @@ class FoodAPI {
                       httpResponse.statusCode == 200 else {
                     throw URLError(.badServerResponse)
                 }
-//                if let jsonString = String(data: output.data, encoding: .utf8) {
-//                    print("Raw JSON data: \(jsonString)")
-//                }
                 return output.data
             }
             .decode(type: ComplexSearch.self, decoder: JSONDecoder())
@@ -108,9 +67,6 @@ class FoodAPI {
                       httpResponse.statusCode == 200 else {
                     throw URLError(.badServerResponse)
                 }
-//                if let jsonString = String(data: output.data, encoding: .utf8) {
-//                    print("Raw JSON data: \(jsonString)")
-//                }
                 return output.data
             }
             .decode(type: RecipeResult.self, decoder: JSONDecoder())
